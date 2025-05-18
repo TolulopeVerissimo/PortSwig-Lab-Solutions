@@ -30,4 +30,4 @@ mkdir API-testing
 mkdir Web-LLM-attacks
 mkdir Web-cache-deception
 
-find . -type d -exec touch {}/README.md to\;
+find . -type d -exec touch {}/README.md \;
