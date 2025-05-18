@@ -1,0 +1,33 @@
+mkdir SQL-injection
+mkdir Cross-site-scripting
+mkdir Cross-site-request-forgery-CSRF
+mkdir Clickjacking
+mkdir DOM-based-vulnerabilities
+mkdir Cross-origin-resource-sharing-CORS
+mkdir XML-external-entity-XXE-injection
+mkdir Server-side-request-forgery-SSRF
+mkdir HTTP-request-smuggling
+mkdir OS-command-injection
+mkdir Server-side-template-injection
+mkdir Path-traversal
+mkdir Access-control-vulnerabilities
+mkdir Authentication
+mkdir WebSockets
+mkdir Web-cache-poisoning
+mkdir Insecure-deserialization
+mkdir Information-disclosure
+mkdir Business-logic-vulnerabilities
+mkdir HTTP-Host-header-attacks
+mkdir OAuth-authentication
+mkdir File-upload-vulnerabilities
+mkdir JWT
+mkdir Essential-skills
+mkdir Prototype-pollution
+mkdir GraphQL-API-vulnerabilities
+mkdir Race-conditions
+mkdir NoSQL-injection
+mkdir API-testing
+mkdir Web-LLM-attacks
+mkdir Web-cache-deception
+
+find . -type d -exec touch {}/README.md to\;
