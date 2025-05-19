@@ -1,0 +1,1 @@
+xhost +local:* && sudo docker start -i burpsuite

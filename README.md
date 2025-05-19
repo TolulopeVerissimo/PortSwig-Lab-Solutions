@@ -44,16 +44,17 @@ xhost +local:docker
 ```
 
 ```
-docker build -t burpsuite-community .
+docker build -t burpsuite .
 
 docker run -e DISPLAY=$DISPLAY \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   --hostname burpsuite \
   -it --rm \
   --name burpsuite \
-  burpsuite-community
+  burpsuite
 ```
 
+Change Browers http proxy settings as 
 
 ### ToDo / Notes
 - Clean up of ReadMe`s will happen later.

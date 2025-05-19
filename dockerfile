@@ -10,20 +10,21 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Install system dependencies and Java
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
-        apt-utils \
-        iputils-ping \
-        unzip \
-        nano \
-        dbus-x11 \
-        packagekit-gtk3-module \
-        libcanberra-gtk3-module \
-        openjdk-17-jdk \
-        xclip \
-        iproute2 \
-        netcat-openbsd \
-        curl \
-        wget \
-        fonts-roboto && \
+    firefox-esr \
+    apt-utils \
+    iputils-ping \
+    unzip \
+    nano \
+    dbus-x11 \
+    packagekit-gtk3-module \
+    libcanberra-gtk3-module \
+    openjdk-17-jdk \
+    xclip \
+    iproute2 \
+    netcat-openbsd \
+    curl \
+    wget \
+    fonts-roboto && \
     apt-get full-upgrade -y && \
     apt-get autoremove -y && \
     apt-get autoclean -y && \
