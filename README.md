@@ -36,12 +36,22 @@ I'll cover the following sections found on PortSwigger:
 - Web cache deception
 
 
-Commands
+## Commands
+
+Run with X11 GUI Support
+```
+xhost +local:docker
+```
 
 ```
-docker image build -t burpsuite -f BurpSuite-Docker-Image/Dockerfile .
+docker build -t burpsuite-community .
 
-docker run -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix/ --hostname burpsuite -it --name burpsuite burpsuite
+docker run -e DISPLAY=$DISPLAY \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  --hostname burpsuite \
+  -it --rm \
+  --name burpsuite \
+  burpsuite-community
 ```
 
 

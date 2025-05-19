@@ -1,54 +1,56 @@
-# Written by Şefik Efe aka f4T1H
-# Licensed under the GNU General Public License v3.0
-# See https://github.com/f4T1H21/BurpSuite-Docker-Image for more details
+# Use a stable Debian base image
+FROM debian:bookworm
 
-# Use latest Debian image release.
-FROM debian:latest
-
-# Set default shell for both buildtime and runtime.
+# Use bash as the default shell
 SHELL ["/bin/bash", "-c"]
 
-# Because frontend dialog does not exists,
-# ignore interactive config for packages with
-# interactive config enabled on their defaults.
+# Prevent interactive prompts during build
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Update package lists and install packages.
-RUN apt-get update -y
-RUN apt-get install -y apt-utils
-RUN apt-get full-upgrade -y
-RUN apt-get install -y iputils-ping unzip nano \
-                       dbus-x11 packagekit-gtk3-module \
-                       libcanberra-gtk3-module openjdk-11-jdk \
-                       xclip iproute2 netcat curl wget fonts-roboto
-RUN apt-get autoremove -y && apt-get autoclean && apt-get clean
+# Install system dependencies and Java
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends \
+        apt-utils \
+        iputils-ping \
+        unzip \
+        nano \
+        dbus-x11 \
+        packagekit-gtk3-module \
+        libcanberra-gtk3-module \
+        openjdk-17-jdk \
+        xclip \
+        iproute2 \
+        netcat-openbsd \
+        curl \
+        wget \
+        fonts-roboto && \
+    apt-get full-upgrade -y && \
+    apt-get autoremove -y && \
+    apt-get autoclean -y && \
+    apt-get clean -y
 
-# Copy Burp Suite file.
-RUN mkdir -p /root/burpsuite
+# Create and switch to Burp directory
 WORKDIR /root/burpsuite
-COPY burpsuite.zip .
-RUN unzip burpsuite.zip
-# -P 12345
 
-# Download and Install JetBrains Mono fonts.
+# Download Burp Suite Community Edition JAR directly
+RUN wget -q "https://portswigger.net/burp/releases/download?product=community&version=2024.1.1&type=Jar" -O burpsuite.jar 
+# Install JetBrains Mono font
 WORKDIR /root
-RUN wget https://download.jetbrains.com/fonts/JetBrainsMono-2.242.zip
-RUN mkdir /usr/share/fonts/ttf
-RUN unzip -j JetBrainsMono-2.242.zip fonts/ttf/* -d /usr/share/fonts/ttf/
-RUN rm JetBrainsMono-2.242.zip
+RUN wget -q https://download.jetbrains.com/fonts/JetBrainsMono-2.242.zip && \
+    mkdir -p /usr/share/fonts/ttf && \
+    unzip -j JetBrainsMono-2.242.zip "fonts/ttf/*" -d /usr/share/fonts/ttf/ && \
+    rm JetBrainsMono-2.242.zip
 
-# Generate machine UUID.
-RUN  dbus-uuidgen > /etc/machine-id
+# Generate machine ID for D-Bus
+RUN dbus-uuidgen > /etc/machine-id
 
-# Create handy aliases.
-RUN echo "alias burp='java -jar -Xmx4g /root/burpsuite/burpsuite.jar'" \
-                          >> /root/.bashrc
+# Add handy aliases and auto-start Burp in .bashrc
+RUN echo "alias burp='java -jar -Xmx4g /root/burpsuite/burpsuite.jar'" >> /root/.bashrc && \
+    echo "alias c='echo -e \033[0m'" >> /root/.bashrc && \
+    echo "alias cls='clear'" >> /root/.bashrc && \
+    echo "alias ee='exit'" >> /root/.bashrc && \
+    echo "alias up='apt-get update && apt-get full-upgrade -y && apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y'" >> /root/.bashrc && \
+    echo "burp &" >> /root/.bashrc
 
-RUN echo "alias c=\"echo -e '\033[0m'\" # Reset terminal color" >> /root/.bashrc
-RUN echo "alias cls='clear'" >> /root/.bashrc
-RUN echo "alias ee='exit'" >> /root/.bashrc
-RUN echo "alias up='apt-get update && apt-get full-upgrade -y && apt-get autoremove" \
-                       "-y && apt-get autoclean && apt-get clean'" >> /root/.bashrc
-
-# Fire up Burp Suite whenever bash runs (.bashrc file gets executed).
-RUN echo 'burp &' >> /root/.bashrc
+# Set working directory
+WORKDIR /root
